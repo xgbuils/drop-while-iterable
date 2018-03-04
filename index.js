@@ -2,18 +2,6 @@ const arrayOf = require('immutable-array.of')
 const push = require('immutable-array.push')
 const findIndexFrom = require('immutable-array.find-index-from')
 
-function dropWhile (p) {
-    const obj = Object.create(this.constructor.prototype)
-    obj.ps = push(p, this.ps)
-    obj.iterable = this.iterable
-    return obj
-}
-
-function DropWhileIterable (iterable) {
-    this.iterable = iterable
-    this.ps = arrayOf([])
-}
-
 function init () {
     this.index = 0
 }
@@ -26,29 +14,37 @@ function apply (value) {
     return this.index === -1 ? {value} : undefined
 }
 
-Object.defineProperties(DropWhileIterable.prototype, {
-    dropWhile: {
-        value: dropWhile
-    },
-    [Symbol.iterator]: {
-        value () {
-            init.call(this)
-            const self = this
-            const iterator = this.iterable[Symbol.iterator]()
-            let status
-            return {
-                next () {
-                    while (!(status = iterator.next()).done) {
-                        status = apply.call(self, status.value)
-                        if (status) {
-                            return status
-                        }
-                    }
-                    return {done: true}
+function generator () {
+    init.call(this)
+    const self = this
+    const iterator = this.iterable[Symbol.iterator]()
+    let status
+    return {
+        next () {
+            while (!(status = iterator.next()).done) {
+                status = apply.call(self, status.value)
+                if (status) {
+                    return status
                 }
             }
+            return {done: true}
         }
     }
-})
+}
 
-module.exports = DropWhileIterable
+module.exports = {
+    of (iterable) {
+        return {
+            iterable,
+            ps: arrayOf([]),
+            [Symbol.iterator]: generator
+        }
+    },
+    dropWhile (p, dropWhileIterable) {
+        return {
+            ps: push(p, dropWhileIterable.ps),
+            iterable: dropWhileIterable.iterable,
+            [Symbol.iterator]: generator
+        }
+    }
+}
