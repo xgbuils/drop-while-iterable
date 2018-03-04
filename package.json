@@ -30,12 +30,12 @@
   "devDependencies": {
     "babel-register": "^6.26.0",
     "coveralls": "^3.0.0",
-    "eslint": "^4.18.0",
+    "eslint": "^4.18.2",
     "npm-check": "^5.5.2",
     "nyc": "^11.4.1",
     "pre-commit": "^1.2.2",
     "tap-spec": "^4.1.1",
-    "tape": "^4.8.0"
+    "tape": "^4.9.0"
   },
   "dependencies": {
     "immutable-array.find-index-from": "^0.1.0",
