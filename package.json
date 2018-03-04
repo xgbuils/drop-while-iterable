@@ -1,6 +1,6 @@
 {
   "name": "drop-while-iterable",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "iterable class that provides dropWhile method",
   "main": "index.js",
   "scripts": {
