@@ -15,22 +15,22 @@ $ npm install drop-while-iterable --save
 
 ## Usage
 ``` javascript
-const DropWhileIterable = require('drop-while-iterable')
+const I = require('drop-while-iterable') 
 
-const iterable = new DropWhileIterable(new Set([4, 2, 7, 8, 4, 7])) // (4 2 7 8 4 7)
-    .dropWhile(e => e % 2 === 0) // (7 8 4 7)
-    .dropWhile(e => e > 5) // (4 7)
+const first = I.of(new Set([4, 2, 7, 8, 4, 7])) // (4 2 7 8 4 7)
+const second = I.dropWhile(e => e % 2 === 0, first) // (7 8 4 7)
+const third = I.dropWhile(e => e > 5, second) // (4 7)
 
 // converting to array:
-[...iterable] // [4 7]
+[...third] // [4 7]
 
 // traversing values:
-for (const val of iterable) {
+for (const val of third) {
     // ...
 }
 
 // creating an iterator that traverses the values
-let iterator = iterable[Symbol.iterator]()
+let iterator = third[Symbol.iterator]()
 iterator.next() // {value: 4, done: false}
 iterator.next() // {value: 7, done: false}
 iterator.next() // {value: undefined, done: true}
@@ -43,8 +43,7 @@ const naturals = {
     }
 } // (1 2 3 4...)
 
-new DropWhileIterable(naturals) // (1 2 3 4 5 6 7 8 9...)
-    .dropWhile(e => e > 5) // (6 7 8 9 10...)
+I.dropWhile(e => e > 5, I.of(naturals)) // (6 7 8 9 10...)
 ```
 
 ## Support
